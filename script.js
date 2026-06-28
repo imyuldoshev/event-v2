@@ -294,6 +294,7 @@ const ROLE_META = {
 
 const MISSION_TIME_LIMIT = 8 * 60; // seconds per mission stage
 const GLOBAL_TIME_LIMIT = 30 * 60; // seconds total
+const QUESTIONS_PER_AGENT = 10;
 const WRONG_ANSWER_PENALTY_1 = 10; // first wrong attempt
 const WRONG_ANSWER_PENALTY_2 = 15; // second wrong attempt, then auto-skip
 const MAX_ANSWER_ATTEMPTS = 2;
@@ -334,7 +335,7 @@ function seedFromString(str) {
 
 function missionsForRole(teamName, role) {
   const seed = seedFromString(teamName + role);
-  return seededShuffle(POOLS[role], seed).slice(0, 3);
+  return seededShuffle(POOLS[role], seed); // all 10 questions, just in a per-team shuffled order
 }
 
 function fragmentForRole(teamName, role) {
@@ -556,20 +557,20 @@ function onRemoteStateChange() {
 
 function solvedArrayFor(role) {
   const key = 'solved_' + role.toLowerCase();
-  return (state.row && state.row[key]) || [false, false, false];
+  return (state.row && state.row[key]) || Array(QUESTIONS_PER_AGENT).fill(false);
 }
 
 function renderVaults() {
   ['A', 'B', 'C'].forEach((role) => {
     const solved = solvedArrayFor(role);
     const solvedCount = solved.filter(Boolean).length;
-    document.getElementById(`vp-fill-${role}`).style.width = `${(solvedCount / 3) * 100}%`;
-    document.getElementById(`vault-status-${role}`).textContent = `${solvedCount} / 3 BOSQICH`;
+    document.getElementById(`vp-fill-${role}`).style.width = `${(solvedCount / QUESTIONS_PER_AGENT) * 100}%`;
+    document.getElementById(`vault-status-${role}`).textContent = `${solvedCount} / ${QUESTIONS_PER_AGENT} BOSQICH`;
     const card = document.getElementById(`vault-${role.toLowerCase()}`);
-    card.classList.toggle('complete', solvedCount === 3);
+    card.classList.toggle('complete', solvedCount === QUESTIONS_PER_AGENT);
     card.classList.toggle('locked-other', role !== state.role);
     const btn = card.querySelector('.btn-vault');
-    if (solvedCount === 3) btn.textContent = 'SEYF OCHILDI ✓';
+    if (solvedCount === QUESTIONS_PER_AGENT) btn.textContent = 'SEYF OCHILDI ✓';
     else if (role !== state.role) btn.textContent = `FAQAT AGENT ${role} UCHUN`;
     else btn.textContent = 'SEYFGA KIRISH';
   });
@@ -713,7 +714,7 @@ function openVault(role) {
   activeMissionCtx = { role, stageIdx, mission, timeLeft: MISSION_TIME_LIMIT, timerInterval: null, hintUsed: false, wrongAttempts: 0 };
 
   document.getElementById('modal-role-tag').textContent = `AGENT ${role} — ${ROLE_META[role].name}`;
-  document.getElementById('modal-stage-tag').textContent = `BOSQICH ${stageIdx + 1} / 3`;
+  document.getElementById('modal-stage-tag').textContent = `BOSQICH ${stageIdx + 1} / ${QUESTIONS_PER_AGENT}`;
   document.getElementById('modal-mission-title').textContent = mission.title;
   document.getElementById('modal-feedback').textContent = '';
   document.getElementById('modal-feedback').className = 'modal-feedback';

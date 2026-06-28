@@ -10,12 +10,12 @@ create table if not exists team_state (
   fused        boolean not null default false,
   finished     boolean not null default false,
   final_outcome text,
-  solved_a     boolean[] not null default '{false,false,false}',
-  solved_b     boolean[] not null default '{false,false,false}',
-  solved_c     boolean[] not null default '{false,false,false}',
-  hint_a       boolean[] not null default '{false,false,false}',
-  hint_b       boolean[] not null default '{false,false,false}',
-  hint_c       boolean[] not null default '{false,false,false}',
+  solved_a     boolean[] not null default '{false,false,false,false,false,false,false,false,false,false}',
+  solved_b     boolean[] not null default '{false,false,false,false,false,false,false,false,false,false}',
+  solved_c     boolean[] not null default '{false,false,false,false,false,false,false,false,false,false}',
+  hint_a       boolean[] not null default '{false,false,false,false,false,false,false,false,false,false}',
+  hint_b       boolean[] not null default '{false,false,false,false,false,false,false,false,false,false}',
+  hint_c       boolean[] not null default '{false,false,false,false,false,false,false,false,false,false}',
   updated_at   timestamptz not null default now()
 );
 
