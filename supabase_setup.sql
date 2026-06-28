@@ -10,6 +10,9 @@ create table if not exists team_state (
   fused        boolean not null default false,
   finished     boolean not null default false,
   final_outcome text,
+  claimed_a    boolean not null default false,
+  claimed_b    boolean not null default false,
+  claimed_c    boolean not null default false,
   solved_a     boolean[] not null default '{false,false,false,false,false,false,false,false,false,false}',
   solved_b     boolean[] not null default '{false,false,false,false,false,false,false,false,false,false}',
   solved_c     boolean[] not null default '{false,false,false,false,false,false,false,false,false,false}',
@@ -28,6 +31,24 @@ drop policy if exists "public update" on team_state;
 create policy "public read"   on team_state for select using (true);
 create policy "public insert" on team_state for insert with check (true);
 create policy "public update" on team_state for update using (true);
+
+-- Atomic: claim an agent role exclusively. Returns true if this device got it,
+-- false if another device already claimed that role first.
+create or replace function claim_role(p_team_id int, p_role text)
+returns boolean as $$
+declare affected int;
+begin
+  if p_role = 'A' then
+    update team_state set claimed_a = true, updated_at = now() where team_id = p_team_id and claimed_a = false;
+  elsif p_role = 'B' then
+    update team_state set claimed_b = true, updated_at = now() where team_id = p_team_id and claimed_b = false;
+  else
+    update team_state set claimed_c = true, updated_at = now() where team_id = p_team_id and claimed_c = false;
+  end if;
+  GET DIAGNOSTICS affected = ROW_COUNT;
+  return affected > 0;
+end;
+$$ language plpgsql;
 
 -- Atomic: mark one mission stage solved + award points (1-based stage index)
 create or replace function solve_mission(p_team_id int, p_role text, p_stage int, p_points int)

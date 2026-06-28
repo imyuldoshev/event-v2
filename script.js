@@ -457,7 +457,7 @@ async function renderTeamGrid() {
   });
 }
 
-function pickTeam(teamId) {
+async function pickTeam(teamId) {
   state = {
     teamId,
     teamName: `TEAM ${teamId}`,
@@ -469,33 +469,60 @@ function pickTeam(teamId) {
     alertInterval: null,
   };
   document.getElementById('role-team-name').textContent = teamDisplayName(state.teamName);
-  document.getElementById('role-connect-status').textContent = '';
+  document.getElementById('role-connect-status').textContent = 'Ulanmoqda...';
   showScreen('screen-role');
-  refreshRolePickLocks();
+
+  // Idempotent row creation: if the team row doesn't exist yet, create it. If it
+  // already exists (other agents already joined), this does nothing and preserves state.
+  await sb.from('team_state').upsert(
+    { team_id: state.teamId, team_name: state.teamName },
+    { onConflict: 'team_id', ignoreDuplicates: true }
+  );
+  const { data: row } = await sb.from('team_state').select('*').eq('team_id', state.teamId).single();
+  state.row = row;
+  document.getElementById('role-connect-status').textContent = '';
+
+  await subscribeRealtime();
+  renderRolePickLocks();
 }
 
-async function refreshRolePickLocks() {
-  // Show which agent roles are already claimed on OTHER devices isn't tracked server-side
-  // (no per-device presence needed) — any agent may (re)join their role from their own device.
+function renderRolePickLocks() {
+  if (!state || !state.row) return;
+  ['A', 'B', 'C'].forEach((role) => {
+    const card = document.querySelector(`.role-pick[data-role="${role}"]`);
+    if (!card) return;
+    const taken = !!state.row[`claimed_${role.toLowerCase()}`];
+    card.classList.toggle('taken', taken && state.role !== role);
+  });
 }
 
 async function pickRole(role) {
+  // Guard against tapping a role another device already claimed.
+  if (state.row && state.row[`claimed_${role.toLowerCase()}`] && state.role !== role) {
+    alert(`Agent ${role} rolini boshqa qurilma allaqachon tanladi. Boshqa rolni tanlang.`);
+    return;
+  }
+
+  const { data: claimed, error: claimError } = await sb.rpc('claim_role', { p_team_id: state.teamId, p_role: role });
+  if (claimError) {
+    alert('⚠ Ulanish uzildi — rolni band qila olmadik. Wi-Fi\'ni tekshirib qayta urinib ko\'ring.');
+    return;
+  }
+  if (!claimed) {
+    alert(`Agent ${role} rolini boshqa qurilma hozir tanladi. Boshqa rolni tanlang.`);
+    const { data: freshRow } = await sb.from('team_state').select('*').eq('team_id', state.teamId).single();
+    state.row = freshRow;
+    renderRolePickLocks();
+    return;
+  }
+
   state.role = role;
   state.missions = missionsForRole(state.teamName, role);
   const statusEl = document.getElementById('role-connect-status');
   statusEl.textContent = 'LAB-09 markaziy tizimiga ulanish...';
 
-  // Idempotent row creation: if the team row doesn't exist yet, create it. If it
-  // already exists (another agent joined first), this does nothing and preserves state.
-  await sb.from('team_state').upsert(
-    { team_id: state.teamId, team_name: state.teamName },
-    { onConflict: 'team_id', ignoreDuplicates: true }
-  );
-
   const { data: row } = await sb.from('team_state').select('*').eq('team_id', state.teamId).single();
   state.row = row;
-
-  subscribeRealtime();
 
   if (row && row.finished) {
     // This team already completed its mission before this device joined —
@@ -515,10 +542,13 @@ async function pickRole(role) {
   ], document.getElementById('briefing-text'), () => {});
 }
 
-function subscribeRealtime() {
-  if (state.channel) sb.removeChannel(state.channel);
+async function subscribeRealtime() {
+  if (state.channel) {
+    await sb.removeChannel(state.channel);
+    state.channel = null;
+  }
   state.channel = sb
-    .channel(`team-${state.teamId}`)
+    .channel(`team-${state.teamId}-${Date.now()}`)
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'team_state', filter: `team_id=eq.${state.teamId}` }, (payload) => {
       state.row = payload.new;
       onRemoteStateChange();
@@ -545,6 +575,9 @@ async function enterDashboard() {
 }
 
 function onRemoteStateChange() {
+  if (document.getElementById('screen-role').classList.contains('active')) {
+    renderRolePickLocks();
+  }
   if (document.getElementById('screen-dashboard').classList.contains('active')) {
     renderVaults();
     updateScoreDisplay();
