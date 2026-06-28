@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,14 +20,14 @@
 
     <div class="intro-main" id="intro-main" hidden>
       <div class="alarm-bar">
-        <span class="dot red"></span> SECURITY BREACH DETECTED <span class="dot red"></span>
+        <span class="dot red"></span> XAVFSIZLIK BUZILISHI ANIQLANDI <span class="dot red"></span>
       </div>
       <h1 class="title-glitch" data-text="OPERATION: LAB-09">OPERATION: LAB-09</h1>
-      <p class="subtitle">CLASSIFIED // EYES ONLY // LAB-09 MAINFRAME</p>
+      <p class="subtitle">MAXFIY // FAQAT AGENTLAR UCHUN // LAB-09 MARKAZIY TIZIMI</p>
 
       <div class="intro-text" id="intro-typewriter"></div>
 
-      <button id="btn-start-mission" class="btn-primary" hidden>BEGIN MISSION BRIEFING ▸</button>
+      <button id="btn-start-mission" class="btn-primary" hidden>MISSIYA BRIFINGINI BOSHLASH ▸</button>
     </div>
   </div>
 </section>
@@ -35,27 +35,27 @@
 <!-- ================= SCREEN 1 : TEAM SELECT ================= -->
 <section id="screen-teams" class="screen">
   <div class="topbar">
-    <div class="brand">LAB-09 // AGENT NETWORK</div>
+    <div class="brand">LAB-09 // AGENTLAR TARMOG'I</div>
     <div class="clock-mini" id="clock-mini">30:00</div>
   </div>
-  <h2 class="section-title">SELECT YOUR SQUAD</h2>
-  <p class="section-sub">9 squads are deployed across LAB-09. Identify your unit to receive your dossier.</p>
+  <h2 class="section-title">JAMOANGIZNI TANLANG</h2>
+  <p class="section-sub">LAB-09 ichida 9 ta jamoa joylashtirilgan. Hujjat papkangizni olish uchun jamoangizni aniqlang.</p>
   <div class="team-grid" id="team-grid"></div>
   <div style="text-align:center; margin-top:30px;">
-    <button id="btn-reset-all" class="btn-ghost">RESET ALL TEAM DATA</button>
+    <button id="btn-reset-all" class="btn-ghost">BARCHA JAMOA MA'LUMOTLARINI TOZALASH</button>
   </div>
 </section>
 
 <!-- ================= SCREEN 2 : BRIEFING ================= -->
 <section id="screen-role" class="screen">
   <div class="briefing-box">
-    <span class="tag">DEVICE REGISTRATION</span>
-    <h2 id="role-team-name">TEAM —</h2>
-    <p class="section-sub">This device belongs to which agent? Each agent uses their OWN device — all three stay in sync.</p>
+    <span class="tag">QURILMANI RO'YXATDAN O'TKAZISH</span>
+    <h2 id="role-team-name">JAMOA —</h2>
+    <p class="section-sub">Bu qurilma qaysi agentga tegishli? Har bir agent O'Z qurilmasidan foydalanadi — uchchalasi sinxron ishlaydi.</p>
     <div class="agent-roles" id="role-pick-grid">
-      <div class="role-card role-pick" data-role="A"><span class="role-letter">A</span><span class="role-name">THE ARCHITECT</span><span class="role-desc">HTML &amp; Logic</span></div>
-      <div class="role-card role-pick" data-role="B"><span class="role-letter">B</span><span class="role-name">THE GHOST</span><span class="role-desc">Cipher &amp; Recon</span></div>
-      <div class="role-card role-pick" data-role="C"><span class="role-letter">C</span><span class="role-name">THE ORACLE</span><span class="role-desc">AI &amp; Puzzles</span></div>
+      <div class="role-card role-pick" data-role="A"><span class="role-letter">A</span><span class="role-name">ME'MOR</span><span class="role-desc">HTML va Mantiq</span></div>
+      <div class="role-card role-pick" data-role="B"><span class="role-letter">B</span><span class="role-name">ARVOH</span><span class="role-desc">Shifr va Tekshiruv</span></div>
+      <div class="role-card role-pick" data-role="C"><span class="role-letter">C</span><span class="role-name">BASHORATCHI</span><span class="role-desc">AI va Topishmoqlar</span></div>
     </div>
     <div id="role-connect-status" class="section-sub"></div>
   </div>
@@ -64,8 +64,8 @@
 <section id="screen-briefing" class="screen">
   <div class="briefing-box">
     <div class="briefing-header">
-      <span class="tag">INCOMING TRANSMISSION</span>
-      <h2 id="briefing-team-name">TEAM —</h2>
+      <span class="tag">KIRUVCHI SIGNAL</span>
+      <h2 id="briefing-team-name">JAMOA —</h2>
     </div>
     <div class="echo-avatar">
       <div class="echo-core"></div>
@@ -73,11 +73,11 @@
     </div>
     <p class="briefing-text" id="briefing-text"></p>
     <div class="agent-roles">
-      <div class="role-card"><span class="role-letter">A</span><span class="role-name">THE ARCHITECT</span><span class="role-desc">HTML &amp; Logic</span></div>
-      <div class="role-card"><span class="role-letter">B</span><span class="role-name">THE GHOST</span><span class="role-desc">Cipher &amp; Recon</span></div>
-      <div class="role-card"><span class="role-letter">C</span><span class="role-name">THE ORACLE</span><span class="role-desc">AI &amp; Puzzles</span></div>
+      <div class="role-card"><span class="role-letter">A</span><span class="role-name">ME'MOR</span><span class="role-desc">HTML va Mantiq</span></div>
+      <div class="role-card"><span class="role-letter">B</span><span class="role-name">ARVOH</span><span class="role-desc">Shifr va Tekshiruv</span></div>
+      <div class="role-card"><span class="role-letter">C</span><span class="role-name">BASHORATCHI</span><span class="role-desc">AI va Topishmoqlar</span></div>
     </div>
-    <button id="btn-deploy" class="btn-primary">DEPLOY TO LAB-09 ▸</button>
+    <button id="btn-deploy" class="btn-primary">LAB-09GA JOYLASHISH ▸</button>
   </div>
 </section>
 
@@ -85,55 +85,55 @@
 <section id="screen-dashboard" class="screen">
   <header class="dash-top">
     <div class="dash-left">
-      <div class="brand small" id="dash-team-name">TEAM —</div>
+      <div class="brand small" id="dash-team-name">JAMOA —</div>
       <div class="lab-stability">
-        LAB STABILITY: <span id="stability-pct">100%</span>
+        LAB BARQARORLIGI: <span id="stability-pct">100%</span>
         <div class="stability-bar"><div class="stability-fill" id="stability-fill"></div></div>
       </div>
     </div>
     <div class="dash-center">
       <div class="timer-wrap">
-        <div class="timer-label">MAINFRAME DETONATION IN</div>
+        <div class="timer-label">MARKAZIY TIZIM PORTLASHIGACHA</div>
         <div class="timer-display" id="main-timer">30:00</div>
       </div>
     </div>
     <div class="dash-right">
-      <div class="score-box">SCORE<br><span id="score-display">0</span></div>
+      <div class="score-box">BALL<br><span id="score-display">0</span></div>
     </div>
   </header>
 
-  <div id="alert-ticker" class="alert-ticker"><span id="alert-ticker-text">All systems nominal...</span></div>
+  <div id="alert-ticker" class="alert-ticker"><span id="alert-ticker-text">Barcha tizimlar barqaror...</span></div>
 
   <div class="vault-grid">
     <div class="vault-card" id="vault-a" data-role="A">
       <div class="vault-icon">⌁</div>
       <div class="vault-title">AGENT A</div>
-      <div class="vault-sub">THE ARCHITECT</div>
+      <div class="vault-sub">ME'MOR</div>
       <div class="vault-progress"><div class="vp-fill" id="vp-fill-A"></div></div>
-      <div class="vault-status" id="vault-status-A">0 / 3 STAGES</div>
-      <button class="btn-vault" data-open="A">ENTER VAULT</button>
+      <div class="vault-status" id="vault-status-A">0 / 3 BOSQICH</div>
+      <button class="btn-vault" data-open="A">SEYFGA KIRISH</button>
     </div>
     <div class="vault-card" id="vault-b" data-role="B">
       <div class="vault-icon">◈</div>
       <div class="vault-title">AGENT B</div>
-      <div class="vault-sub">THE GHOST</div>
+      <div class="vault-sub">ARVOH</div>
       <div class="vault-progress"><div class="vp-fill" id="vp-fill-B"></div></div>
-      <div class="vault-status" id="vault-status-B">0 / 3 STAGES</div>
-      <button class="btn-vault" data-open="B">ENTER VAULT</button>
+      <div class="vault-status" id="vault-status-B">0 / 3 BOSQICH</div>
+      <button class="btn-vault" data-open="B">SEYFGA KIRISH</button>
     </div>
     <div class="vault-card" id="vault-c" data-role="C">
       <div class="vault-icon">⬡</div>
       <div class="vault-title">AGENT C</div>
-      <div class="vault-sub">THE ORACLE</div>
+      <div class="vault-sub">BASHORATCHI</div>
       <div class="vault-progress"><div class="vp-fill" id="vp-fill-C"></div></div>
-      <div class="vault-status" id="vault-status-C">0 / 3 STAGES</div>
-      <button class="btn-vault" data-open="C">ENTER VAULT</button>
+      <div class="vault-status" id="vault-status-C">0 / 3 BOSQICH</div>
+      <button class="btn-vault" data-open="C">SEYFGA KIRISH</button>
     </div>
   </div>
 
   <div class="fusion-panel" id="fusion-panel">
-    <div class="fusion-title">⚠ ALL VAULTS BREACHED — FUSION PROTOCOL UNLOCKED ⚠</div>
-    <button id="btn-goto-fusion" class="btn-primary danger">PROCEED TO FUSION TERMINAL ▸</button>
+    <div class="fusion-title">⚠ BARCHA SEYFLAR OCHILDI — BIRLASHTIRISH PROTOKOLI FAOLLASHDI ⚠</div>
+    <button id="btn-goto-fusion" class="btn-primary danger">BIRLASHTIRISH TERMINALIGA O'TISH ▸</button>
   </div>
 </section>
 
@@ -142,15 +142,15 @@
   <div class="modal-box">
     <div class="modal-header">
       <span id="modal-role-tag">AGENT A</span>
-      <span id="modal-stage-tag">STAGE 1 / 3</span>
+      <span id="modal-stage-tag">BOSQICH 1 / 3</span>
       <div class="modal-timer" id="modal-timer">02:00</div>
     </div>
-    <h3 id="modal-mission-title">Mission Title</h3>
+    <h3 id="modal-mission-title">Missiya nomi</h3>
     <div id="modal-mission-body" class="mission-body"></div>
     <div class="modal-feedback" id="modal-feedback"></div>
     <div class="modal-footer">
-      <button id="btn-hint" class="btn-ghost">REQUEST HINT (-20 pts)</button>
-      <button id="btn-close-modal" class="btn-ghost">EXIT VAULT</button>
+      <button id="btn-hint" class="btn-ghost">MASLAHAT SO'RASH (-20 ball)</button>
+      <button id="btn-close-modal" class="btn-ghost">SEYFDAN CHIQISH</button>
     </div>
   </div>
 </div>
@@ -158,8 +158,8 @@
 <!-- ================= SCREEN 4 : FUSION TERMINAL ================= -->
 <section id="screen-fusion" class="screen">
   <div class="fusion-terminal">
-    <h2 class="glitch-soft">CODE FUSION PROTOCOL</h2>
-    <p class="section-sub">All three agents must converge. Combine your fragments to forge the disarm code.</p>
+    <h2 class="glitch-soft">KODLARNI BIRLASHTIRISH PROTOKOLI</h2>
+    <p class="section-sub">Uchta agent ham birlashishi kerak. Bombani o'chirish kodini hosil qilish uchun bo'laklaringizni birlashtiring.</p>
     <div class="fragments-row">
       <div class="fragment-box"><span>AGENT A</span><div class="fragment-val" id="frag-A">--</div></div>
       <div class="fragment-plus">+</div>
@@ -167,15 +167,15 @@
       <div class="fragment-plus">+</div>
       <div class="fragment-box"><span>AGENT C</span><div class="fragment-val" id="frag-C">--</div></div>
     </div>
-    <button id="btn-fuse" class="btn-primary">FUSE CODES ▸</button>
+    <button id="btn-fuse" class="btn-primary">KODLARNI BIRLASHTIRISH ▸</button>
 
     <div class="bomb-console" id="bomb-console" hidden>
       <div class="bomb-display">
         <div class="bomb-led-row" id="bomb-led-row"></div>
       </div>
-      <label class="bomb-label">ENTER DISARM CODE</label>
+      <label class="bomb-label">O'CHIRISH KODINI KIRITING</label>
       <input type="text" id="disarm-input" maxlength="6" inputmode="numeric" autocomplete="off" placeholder="------">
-      <button id="btn-disarm" class="btn-primary danger">DISARM BOMB ▸</button>
+      <button id="btn-disarm" class="btn-primary danger">BOMBANI O'CHIRISH ▸</button>
       <div id="disarm-feedback" class="disarm-feedback"></div>
     </div>
   </div>
@@ -184,16 +184,16 @@
 <!-- ================= SCREEN 5 : END / RESULT ================= -->
 <section id="screen-end" class="screen">
   <div class="end-box" id="end-box">
-    <h1 id="end-headline">MISSION COMPLETE</h1>
-    <div class="end-team" id="end-team-name">TEAM —</div>
+    <h1 id="end-headline">MISSIYA TUGADI</h1>
+    <div class="end-team" id="end-team-name">JAMOA —</div>
     <div class="end-stats">
-      <div class="stat"><span class="stat-label">FINAL SCORE</span><span class="stat-val" id="end-score">0</span></div>
-      <div class="stat"><span class="stat-label">TIME REMAINING</span><span class="stat-val" id="end-time">00:00</span></div>
-      <div class="stat"><span class="stat-label">HINTS USED</span><span class="stat-val" id="end-hints">0</span></div>
+      <div class="stat"><span class="stat-label">YAKUNIY BALL</span><span class="stat-val" id="end-score">0</span></div>
+      <div class="stat"><span class="stat-label">QOLGAN VAQT</span><span class="stat-val" id="end-time">00:00</span></div>
+      <div class="stat"><span class="stat-label">ISHLATILGAN MASLAHATLAR</span><span class="stat-val" id="end-hints">0</span></div>
     </div>
-    <h3>LEADERBOARD</h3>
+    <h3>REYTING JADVALI</h3>
     <div class="leaderboard" id="leaderboard"></div>
-    <button id="btn-restart" class="btn-ghost">RETURN TO SQUAD SELECT</button>
+    <button id="btn-restart" class="btn-ghost">JAMOA TANLASHGA QAYTISH</button>
   </div>
   <canvas id="confetti-canvas"></canvas>
 </section>

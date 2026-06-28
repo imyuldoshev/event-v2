@@ -18,140 +18,267 @@ const TEAMS = Array.from({ length: 9 }, (_, i) => ({
 }));
 
 const ALERT_MESSAGES = [
-  'WARNING: Virus spread detected in sector 4.',
-  'Agent, you have 15 minutes remaining.',
-  'Unauthorized activity detected on mainframe.',
-  'Laboratory security system compromised.',
-  'Emergency protocol activated.',
-  'NULLPOINT signature detected — stay alert.',
-  'Power fluctuation in vault grid. Proceed.',
-  'Backup generators online. Systems stable.',
-  'Encryption layer 2 weakening. Move fast.',
-  'ECHO-9: I am still with you, agents.',
+  'OGOHLANTIRISH: 4-sektorda virus tarqalishi aniqlandi.',
+  'Agent, sizda 15 daqiqa qoldi.',
+  'Markaziy tizimda ruxsatsiz harakat aniqlandi.',
+  'Laboratoriya xavfsizlik tizimi buzilgan.',
+  'Favqulodda protokol faollashtirildi.',
+  'NULLPOINT signaturasi aniqlandi — diqqat bo\'ling.',
+  'Seyf tarmog\'ida quvvat tebranishi. Davom eting.',
+  'Zaxira generatorlari faol. Tizimlar barqaror.',
+  '2-shifrlash qatlami zaiflashmoqda. Tezroq harakat qiling.',
+  'ECHO-9: Men hali siz bilan birgaman, agentlar.',
 ];
 
-/* ---- AGENT A: HTML / LOGIC (5 mission variants) ---- */
+/* ---- AGENT A: ME'MOR — HTML / CSS / Git ko'nikmalari (10 ta savol, 3 tasi murakkabroq) ---- */
 const POOL_A = [
   {
-    id: 'a1', title: 'CORRUPTED MARKUP',
-    body: `The lab's welcome banner is corrupted. Fix the broken HTML tag so it renders correctly.`,
+    id: 'a1', title: 'BUZILGAN MARKUP',
+    body: `Labning xush kelibsiz banneri buzilgan. Sahifa to'g'ri ko'rinishi uchun HTML tegini tuzating.`,
     code: `<h1>WELCOME<h1>`,
     type: 'text', answer: '<h1>WELCOME</h1>',
-    hint: 'The closing tag needs a forward slash: </h1>',
+    hint: 'Yopilish tegida "/" belgisi bo\'lishi kerak: </h1>',
   },
   {
-    id: 'a2', title: 'BROKEN LINK PROTOCOL',
-    body: `This anchor tag won't open the security feed. Fix the attribute name.`,
-    code: `<a herf="feed.html">Open Feed</a>`,
-    type: 'text', answer: '<a href="feed.html">Open Feed</a>',
-    hint: 'The attribute is spelled "href", not "herf".',
+    id: 'a2', title: 'HTML NIMANI BILDIRADI?',
+    body: `HTML so'zining to'g'ri ma'nosini aniqlang.`,
+    type: 'choice',
+    options: ['HyperText Markup Language', 'High Tech Modern Language', 'Home Tool Markup List', 'Hyperlink Text Manager'],
+    answer: 'HyperText Markup Language',
+    hint: 'Bu veb-sahifalar yaratish uchun standart MARKUP (belgilash) tili.',
   },
   {
-    id: 'a3', title: 'UNCLOSED LIST',
-    body: `The vault inventory list is missing its closing tag. Fix it.`,
-    code: `<ul>\n  <li>Keycard</li>\n  <li>Badge</li>\n</li>`,
-    type: 'text', answer: '<ul>\n  <li>Keycard</li>\n  <li>Badge</li>\n</ul>',
-    hint: 'A list opened with <ul> must close with </ul>, not </li>.',
+    id: 'a3', title: 'CSS NIMANI BILDIRADI?',
+    body: `CSS so'zining to'g'ri ma'nosini aniqlang.`,
+    type: 'choice',
+    options: ['Cascading Style Sheets', 'Computer Styling System', 'Creative Software Solution', 'Code Style Standard'],
+    answer: 'Cascading Style Sheets',
+    hint: 'U stillarni HTML elementlari bo\'ylab "kaskad" qilib o\'tkazadi.',
   },
   {
-    id: 'a4', title: 'LOGIC GATE: ACCESS CHECK',
-    body: `The door opens only if (power IS ON) AND (badge IS VALID). Power = ON. Badge = INVALID. Does the door open?`,
-    type: 'choice', options: ['YES, door opens', 'NO, door stays locked'],
-    answer: 'NO, door stays locked',
-    hint: 'AND requires BOTH conditions to be true.',
+    id: 'a4', title: 'MATN RANGINI O\'ZGARTIRISH',
+    body: `Matn RANGINI o'zgartiruvchi CSS xususiyati qaysi?`,
+    type: 'choice',
+    options: ['color', 'text-color', 'font-color', 'background'],
+    answer: 'color',
+    hint: 'Bu eng oddiy va to\'g\'ridan-to\'g\'ri nom — shunchaki "color".',
   },
   {
-    id: 'a5', title: 'IMAGE TAG MALFUNCTION',
-    body: `This image element is missing a required attribute for accessibility/loading. Fix the tag (use src="scan.png").`,
-    code: `<img alt="scan result">`,
-    type: 'text', answer: '<img src="scan.png" alt="scan result">',
-    hint: 'Images need a "src" attribute pointing to the file.',
+    id: 'a5', title: 'BUZILGAN HAVOLA PROTOKOLI',
+    body: `Bu havola (anchor) tegi xavfsizlik kanalini ochmayapti. Atribut nomini tuzating.`,
+    code: `<a herf="feed.html">Kanalni ochish</a>`,
+    type: 'text', answer: '<a href="feed.html">Kanalni ochish</a>',
+    hint: 'Atribut "href" deb yoziladi, "herf" emas.',
+  },
+  {
+    id: 'a6', title: 'FLEXBOX FAOLLASHTIRISH',
+    body: `Konteynerni Flexbox layoutga aylantiruvchi CSS qoidasi qaysi?`,
+    type: 'choice',
+    options: ['display: flex;', 'position: flex;', 'flex: display;', 'layout: flexbox;'],
+    answer: 'display: flex;',
+    hint: '"display" xususiyatiga "flex" qiymatini berasiz.',
+  },
+  {
+    id: 'a7', title: 'GIT SNAPSHOT',
+    body: `Stage qilingan o'zgarishlarning lokal snapshotini saqlaydigan Git buyrug'i qaysi?`,
+    type: 'choice',
+    options: ['git commit', 'git push', 'git pull', 'git clone'],
+    answer: 'git commit',
+    hint: '"push" GitHub\'ga yuboradi — ammo LOKAL snapshot buyrug\'i undan oldin keladi.',
+  },
+  {
+    id: 'a8', title: 'YOPILMAGAN RO\'YXAT (MURAKKAB)',
+    body: `Seyf inventar ro'yxatida to'g'ri yopilish tegi yo'q. Tuzating.`,
+    code: `<ul>\n  <li>Kalit-karta</li>\n  <li>Nishon</li>\n</li>`,
+    type: 'text', answer: '<ul>\n  <li>Kalit-karta</li>\n  <li>Nishon</li>\n</ul>',
+    hint: '<ul> bilan ochilgan ro\'yxat </ul> bilan yopilishi kerak, </li> bilan emas.',
+  },
+  {
+    id: 'a9', title: 'RESPONSIVE BREAKPOINT (MURAKKAB)',
+    body: `600px dan tor ekranlarga mo'ljallangan media query qaysi?`,
+    type: 'choice',
+    options: ['@media (max-width: 600px) { }', '@media (min-width: 600px) { }', '@responsive (600px) { }', '@screen < 600px { }'],
+    answer: '@media (max-width: 600px) { }',
+    hint: '"max-width" — "shu kenglikkacha", ya\'ni tor ekranlar uchun.',
+  },
+  {
+    id: 'a10', title: 'GIT NASHR TARTIBI (MURAKKAB)',
+    body: `Yangi faylni birinchi marta GitHub'ga nashr qilish uchun bu uch buyruqning TO'G'RI tartibi qaysi?`,
+    type: 'choice',
+    options: ['git add → git commit → git push', 'git push → git commit → git add', 'git commit → git add → git push', 'git push → git add → git commit'],
+    answer: 'git add → git commit → git push',
+    hint: 'Avval TAYYORLAYSIZ (add), keyin SAQLAYSIZ (commit), keyin YUBORASIZ (push).',
   },
 ];
 
-/* ---- AGENT B: CIPHER / RECON (5 mission variants) ---- */
+/* ---- AGENT B: ARVOH — Terminal / DevTools / HTTP / Domen (10 ta savol, 3 tasi murakkabroq) ---- */
 const POOL_B = [
   {
-    id: 'b1', title: 'CAESAR CIPHER — SHIFT 3',
-    body: `NULLPOINT intercepted this message, shifted by 3 letters. Decode it:`,
-    code: `KHOOR ZRUOG`,
-    type: 'text', answer: 'HELLO WORLD',
-    hint: 'Shift every letter BACK by 3 (K→H, H→E...).',
+    id: 'b1', title: 'TERMINAL: FAYLLARNI KO\'RISH',
+    body: `Joriy papkadagi fayllarni ko'rsatadigan terminal buyrug'i qaysi?`,
+    type: 'choice', options: ['ls', 'cd', 'rm', 'mkdir'],
+    answer: 'ls',
+    hint: '"LiSt" haqida o\'ylab ko\'ring — eng qisqa va keng tarqalgan ro\'yxat buyrug\'i.',
   },
   {
-    id: 'b2', title: 'BINARY TRANSMISSION',
-    body: `Decode this binary message into text (1 byte = 1 letter):`,
-    code: `01001100 01000001 01000010`,
-    type: 'text', answer: 'LAB',
-    hint: '01001100=L, 01000001=A, 01000010=B.',
+    id: 'b2', title: 'TERMINAL: YANGI PAPKA',
+    body: `Yangi papka yaratadigan terminal buyrug'i qaysi?`,
+    type: 'choice', options: ['mkdir', 'ls', 'cd', 'touch'],
+    answer: 'mkdir',
+    hint: '"mkdir" = "MaKe DIRectory" (papka yaratish).',
   },
   {
-    id: 'b3', title: 'REVERSED SIGNAL',
-    body: `The signal was captured backwards. Reverse it to read the true message:`,
-    code: `9-BAL EVAS`,
-    type: 'text', answer: 'SAVE LAB-9',
-    hint: 'Read every character from right to left.',
+    id: 'b3', title: 'GOOGLE WORKSPACE: VIDEO QO\'NG\'IROQLAR',
+    body: `Video qo'ng'iroqlar uchun ishlatiladigan Google Workspace vositasi qaysi?`,
+    type: 'choice', options: ['Meet', 'Drive', 'Calendar', 'Gmail'],
+    answer: 'Meet',
+    hint: 'Google "Meet" — nomida aynan shu yozilgan.',
   },
   {
-    id: 'b4', title: 'HIDDEN PIXEL REPORT',
-    body: `Surveillance log: "Row 7 of the security grid lists exactly FOUR anomalies. Column C lists exactly NINE." What is the access number formed by ROW-then-COLUMN counts?`,
-    type: 'text', answer: '49',
-    hint: 'Combine the two counts in order: row count then column count.',
+    id: 'b4', title: 'DEVTOOLS: TARMOQ KUZATUVI',
+    body: `Sahifa yuboradigan va qabul qiladigan barcha so'rovlarni ko'rsatadigan Chrome DevTools bo'limi qaysi?`,
+    type: 'choice', options: ['Network', 'Elements', 'Console', 'Sources'],
+    answer: 'Network',
+    hint: 'U sahifaning TARMOQ (network) trafigini kuzatadi.',
   },
   {
-    id: 'b5', title: 'VIGENÈRE FRAGMENT (KEY: LAB)',
-    body: `Using keyword cipher logic where each letter shifts by the matching key letter's position (L=11,A=0,B=1), decode: "PADM" (hint: it decrypts to a 4-letter word about defense).`,
-    type: 'text', answer: 'GUARD',
-    hint: 'Answer relates to protecting the lab: G-U-A-R-D.',
+    id: 'b5', title: 'URL NIMA?',
+    body: `"URL" nimani bildiradi?`,
+    type: 'choice',
+    options: ['Uniform Resource Locator', 'Universal Reading Link', 'User Request Line', 'Unified Route List'],
+    answer: 'Uniform Resource Locator',
+    hint: 'U internetdagi resursni BIR XIL TARTIBDA aniqlaydi (LOCATES).',
+  },
+  {
+    id: 'b6', title: 'TERMINAL: FAYLNI O\'CHIRISH',
+    body: `Faylni o'chiradigan terminal buyrug'i qaysi?`,
+    type: 'choice', options: ['rm', 'ls', 'mkdir', 'cd'],
+    answer: 'rm',
+    hint: '"rm" = "ReMove". Haqiqiy hayotda bu buyruqdan ehtiyot bo\'ling!',
+  },
+  {
+    id: 'b7', title: 'GOOGLE WORKSPACE: BULUTLI SAQLASH',
+    body: `Fayllaringizni bulutda saqlovchi Google Workspace vositasi qaysi?`,
+    type: 'choice', options: ['Drive', 'Meet', 'Calendar', 'Docs'],
+    answer: 'Drive',
+    hint: 'U fayllaringizni bulutli saqlash tomon "drive" qiladi (boshqaradi).',
+  },
+  {
+    id: 'b8', title: 'CLIENT VS SERVER (MURAKKAB)',
+    body: `Client-Server modelida sahifa yuklanishini boshlash uchun so'rov YUBORADIGAN tomon qaysi?`,
+    type: 'choice', options: ['Client (brauzer)', 'Server', 'DNS', 'Domen'],
+    answer: 'Client (brauzer)',
+    hint: 'SIZ havolani bosasiz yoki URL kiritasiz — sizning brauzeringiz Client hisoblanadi.',
+  },
+  {
+    id: 'b9', title: 'DNS YOZUV TURI (MURAKKAB)',
+    body: `Domen nomini serverning IP manziliga bog'laydigan DNS yozuv turi qaysi?`,
+    type: 'choice', options: ['A record', 'CNAME record', 'MX record', 'TXT record'],
+    answer: 'A record',
+    hint: '"A" — "Address" (manzil) degani — u nomni IP manzilga bog\'laydi.',
+  },
+  {
+    id: 'b10', title: 'HTTP HOLAT KODI (MURAKKAB)',
+    body: `"Sahifa topilmadi" degan ma'noni bildiruvchi HTTP holat kodi qaysi?`,
+    type: 'text', answer: '404',
+    hint: 'Bu butun internetdagi eng mashhur xato kodi.',
   },
 ];
 
-/* ---- AGENT C: AI / QUIZ / LOGIC (5 mission variants) ---- */
+/* ---- AGENT C: BASHORATCHI — Startap tafakkuri / AI / Self-study (10 ta savol, 3 tasi murakkabroq) ---- */
 const POOL_C = [
   {
-    id: 'c1', title: 'IDENTIFY THE AI',
-    body: `Which of these is an example of Artificial Intelligence?`,
+    id: 'c1', title: 'MVP NIMA?',
+    body: `Startap tilida "MVP" nimani bildiradi?`,
     type: 'choice',
-    options: ['A calculator adding two numbers', 'A chess engine that learns from games', 'A light switch', 'A printed book'],
-    answer: 'A chess engine that learns from games',
-    hint: 'AI involves learning or decision-making, not fixed mechanical actions.',
+    options: ['Minimum Viable Product', 'Most Valuable Player', 'Maximum Value Plan', 'Main Vision Project'],
+    answer: 'Minimum Viable Product',
+    hint: 'Bu mahsulotning ishlaydigan va sinab ko\'rish mumkin bo\'lgan eng kichik versiyasi.',
   },
   {
-    id: 'c2', title: 'IT QUIZ: NETWORK BASICS',
-    body: `What does "QR" stand for in "QR Code"?`,
+    id: 'c2', title: 'SHAXSIY DASHBOARD VOSITASI',
+    body: `Shaxsiy eslatmalar va dashboardlarni tashkillashtirish uchun ko'p ishlatiladigan vosita qaysi?`,
+    type: 'choice', options: ['Notion', 'Trello', 'Gmail', 'Calendar'],
+    answer: 'Notion',
+    hint: 'Bu vosita eslatmalar, hujjatlar va dashboardlarni bitta ish maydonida birlashtiradi.',
+  },
+  {
+    id: 'c3', title: 'HAFTALIK VAZIFA TAXTALARI',
+    body: `Haftalik vazifalarni karta va taxtalar orqali vizual boshqarishga yordam beradigan vosita qaysi?`,
+    type: 'choice', options: ['Trello', 'Notion', 'Drive', 'Meet'],
+    answer: 'Trello',
+    hint: 'U ko\'chiriladigan kartalar bilan ustunlardan iborat "taxta"dan foydalanadi.',
+  },
+  {
+    id: 'c4', title: 'STARTAPNING BIRINCHI QADAMI',
+    body: `Har qanday startap mahsulotini yaratishdan oldin BIRINCHI qadam nima?`,
     type: 'choice',
-    options: ['Quick Response', 'Quality Rating', 'Query Register', 'Quad Render'],
-    answer: 'Quick Response',
-    hint: 'It is about how fast the code can be scanned and read.',
+    options: ['Haqiqiy muammoni aniqlash', 'Logotip dizayn qilish', 'Katta jamoa yollash', 'Domen nomi sotib olish'],
+    answer: 'Haqiqiy muammoni aniqlash',
+    hint: 'Har bir yaxshi startap hal qilishga arzigulik MUAMMOni topishdan boshlanadi.',
   },
   {
-    id: 'c3', title: 'LOGIC RIDDLE: THE THREE SWITCHES',
-    body: `ECHO-9 says: "I have a sister AI who always lies, and I always tell the truth. My sister says this number sequence is FAKE: 7-3-9. Is the sequence real or fake?"`,
-    type: 'choice', options: ['REAL', 'FAKE'],
-    answer: 'REAL',
-    hint: 'The sister always lies — so if she says "fake", the truth is the opposite.',
+    id: 'c5', title: 'PROMPT NIMA?',
+    body: `ChatGPT yoki Claude kabi AI bilan gaplashganda, kiritadigan ko'rsatmangizni nima deb ataymiz?`,
+    type: 'choice', options: ['Prompt', 'Query string', 'Command line', 'Script'],
+    answer: 'Prompt',
+    hint: 'Bu AIni javob berishga "undaydigan" (prompts) matn.',
   },
   {
-    id: 'c4', title: 'IT QUIZ: CYBERSECURITY',
-    body: `What is the main purpose of a firewall?`,
+    id: 'c6', title: 'DEBUGGING TAFAKKURI',
+    body: `To'g'ri yoki noto'g'ri: Xato xabarlarini diqqat bilan o'qish xatolarni tezroq tuzatishga yordam beradi.`,
+    type: 'choice', options: ['To\'g\'ri', 'Noto\'g\'ri'],
+    answer: 'To\'g\'ri',
+    hint: 'Xato xabarlari odatda nima va qayerda xato ketganini aniq aytadi.',
+  },
+  {
+    id: 'c7', title: 'KOD SAVOLLARINI QAYERDA SO\'RASH MUMKIN',
+    body: `AI yordamchilardan tashqari, dasturchilarning savol-javob berishi bilan mashhur bo'lgan klassik sayt qaysi?`,
+    type: 'choice', options: ['Stack Overflow', 'Instagram', 'Wikipedia', 'Pinterest'],
+    answer: 'Stack Overflow',
+    hint: 'U o\'n yildan ortiq dasturchilar uchun #1 savol-javob sayti bo\'lib kelgan.',
+  },
+  {
+    id: 'c8', title: 'SELF-STUDY NIMA UCHUN MUHIM (MURAKKAB)',
+    body: `Self-study (mustaqil o'qish) IT mutaxassisi uchun zarur ko'nikma bo'lishining ENG YAXSHI sababi qaysi?`,
     type: 'choice',
-    options: ['To speed up internet', 'To block unauthorized network access', 'To store passwords', 'To cool down the CPU'],
-    answer: 'To block unauthorized network access',
-    hint: 'Think of it as a security guard for network traffic.',
+    options: [
+      'Texnologiya tez o\'zgaradi — kurs tugagandan keyin ham o\'qishni davom ettirishingiz kerak',
+      'Bu sizga endi ustoz kerak emasligini bildiradi',
+      'Bu hujjatlarni o\'qish zaruriyatini yo\'q qiladi',
+      'Bu faqat universitet talabalari uchun muhim',
+    ],
+    answer: 'Texnologiya tez o\'zgaradi — kurs tugagandan keyin ham o\'qishni davom ettirishingiz kerak',
+    hint: 'Hech qaysi kurs HAMMA narsani o\'rgata olmaydi — texnologiya rivojlanishda davom etadi, shuning uchun o\'qish to\'xtamaydi.',
   },
   {
-    id: 'c5', title: 'PATTERN SEQUENCE',
-    body: `Find the next number in NULLPOINT's sequence: 2, 4, 8, 16, ?`,
-    type: 'text', answer: '32',
-    hint: 'Each number doubles the previous one.',
+    id: 'c9', title: 'QURISH VS SINASH (MURAKKAB)',
+    body: `MVP yaratishda, odatda nima BIRINCHI bo'lishi kerak: barcha mumkin bo'lgan funksiyalarni qurish, yoki oddiy versiyani haqiqiy foydalanuvchilar bilan sinash?`,
+    type: 'choice',
+    options: ['Oddiy versiyani haqiqiy foydalanuvchilar bilan sinash', 'Avval barcha mumkin bo\'lgan funksiyalarni qurish'],
+    answer: 'Oddiy versiyani haqiqiy foydalanuvchilar bilan sinash',
+    hint: 'MVP = MINIMUM ishlaydigan mahsulot — katta qurishdan oldin kichik sinaysiz.',
+  },
+  {
+    id: 'c10', title: 'PROMPT YOZISHDAN OLDIN (MURAKKAB)',
+    body: `AIga prompt yozishdan OLDIN o'zingizdan so'rashingiz kerak bo'lgan ENG YAXSHI savol qaysi?`,
+    type: 'choice',
+    options: [
+      'Men aniq qanday natija xohlayman va AI qanday kontekstni bilishi kerak?',
+      'Mening promptim necha belgi bo\'lishi mumkin?',
+      'Qaysi AI kompaniyasi eng mashhur?',
+      'Javob qaysi shriftda bo\'ladi?',
+    ],
+    answer: 'Men aniq qanday natija xohlayman va AI qanday kontekstni bilishi kerak?',
+    hint: 'Aniq maqsad + yetarli kontekst = ancha yaxshi AI javobi.',
   },
 ];
 
 const POOLS = { A: POOL_A, B: POOL_B, C: POOL_C };
 const ROLE_META = {
-  A: { name: 'THE ARCHITECT', desc: 'HTML & Logic' },
-  B: { name: 'THE GHOST', desc: 'Cipher & Recon' },
-  C: { name: 'THE ORACLE', desc: 'AI & Puzzles' },
+  A: { name: 'ME\'MOR', desc: 'HTML va Mantiq' },
+  B: { name: 'ARVOH', desc: 'Shifr va Tekshiruv' },
+  C: { name: 'BASHORATCHI', desc: 'AI va Topishmoqlar' },
 };
 
 const MISSION_TIME_LIMIT = 8 * 60; // seconds per mission stage
@@ -205,6 +332,12 @@ function fragmentForRole(teamName, role) {
   return String(10 + Math.floor(rand() * 89)).padStart(2, '0');
 }
 
+// Display-only label — the internal "TEAM N" string stays unchanged so existing
+// fragment/mission seeds keep working; only the on-screen text is in Uzbek.
+function teamDisplayName(teamName) {
+  return teamName.replace('TEAM', 'JAMOA');
+}
+
 /* ---------------------------------------------------------------
    3. STATE
 ----------------------------------------------------------------*/
@@ -233,13 +366,13 @@ function showScreen(id) {
    5. BOOT / INTRO SEQUENCE
 ----------------------------------------------------------------*/
 const BOOT_LINES = [
-  '> INITIALIZING LAB-09 MAINFRAME...',
-  '> CONNECTING TO SECURITY GRID... OK',
-  '> SCANNING FOR INTRUSIONS...',
-  '> !! ALERT: UNKNOWN ENTITY DETECTED — "NULLPOINT" !!',
-  '> DIGITAL BOMB SIGNATURE FOUND IN CORE SYSTEM',
-  '> ESTIMATED DETONATION: 30:00',
-  '> REQUESTING FIELD AGENTS...',
+  '> LAB-09 MARKAZIY TIZIMI ISHGA TUSHIRILMOQDA...',
+  '> XAVFSIZLIK TARMOG\'IGA ULANISH... OK',
+  '> BUZIB KIRISHLAR SKANERLANMOQDA...',
+  '> !! OGOHLANTIRISH: NOMA\'LUM OBYEKT ANIQLANDI — "NULLPOINT" !!',
+  '> MARKAZIY TIZIMDA RAQAMLI BOMBA SIGNATURASI TOPILDI',
+  '> TAXMINIY PORTLASH VAQTI: 30:00',
+  '> MAYDON AGENTLARI SO\'RALMOQDA...',
 ];
 
 function typeLines(lines, container, onDone) {
@@ -274,10 +407,10 @@ function startIntro() {
       playTone(80, 0.4, 'sawtooth');
       const typeTarget = document.getElementById('intro-typewriter');
       typeLines([
-        'LAB-09 has been infiltrated. A digital bomb is active inside the mainframe.',
-        '9 squads have been activated. Each squad uses THREE separate devices — one per agent.',
-        'You have 30 minutes. Three agents. Three vaults. One disarm code.',
-        'Good luck, agents. LAB-09 is counting on you.',
+        'LAB-09 buzib kirilgan. Markaziy tizim ichida raqamli bomba faol.',
+        '9 ta jamoa faollashtirildi. Har bir jamoa UCHTA alohida qurilmadan foydalanadi — har agentga bittadan.',
+        'Sizda 30 daqiqa bor. Uch agent. Uch seyf. Bitta o\'chirish kodi.',
+        'Omad tilaymiz, agentlar. LAB-09 sizga umid bog\'lagan.',
       ], typeTarget, () => {
         document.getElementById('btn-start-mission').hidden = false;
       });
@@ -290,7 +423,7 @@ function startIntro() {
 ----------------------------------------------------------------*/
 async function renderTeamGrid() {
   const grid = document.getElementById('team-grid');
-  grid.innerHTML = '<p class="section-sub">Loading squad status...</p>';
+  grid.innerHTML = '<p class="section-sub">Jamoalar holati yuklanmoqda...</p>';
   const { data, error } = await sb.from('team_state').select('team_id,finished');
   const finishedSet = new Set((data || []).filter((r) => r.finished).map((r) => r.team_id));
 
@@ -299,10 +432,10 @@ async function renderTeamGrid() {
     const done = finishedSet.has(t.id);
     const card = document.createElement('div');
     card.className = 'team-card' + (done ? ' done' : '');
-    card.innerHTML = `<div class="tnum">${t.id}</div><div class="tlabel">TEAM ${t.id}${done ? '<br>(COMPLETED)' : ''}</div>`;
+    card.innerHTML = `<div class="tnum">${t.id}</div><div class="tlabel">JAMOA ${t.id}${done ? '<br>(YAKUNLANGAN)' : ''}</div>`;
     card.addEventListener('click', async () => {
       if (done) {
-        const replay = confirm(`TEAM ${t.id} already has a saved result. Replay this team? (previous score will be overwritten for everyone)`);
+        const replay = confirm(`JAMOA ${t.id} uchun natija allaqachon saqlangan. Qayta o'ynashni xohlaysizmi? (oldingi ball hamma uchun o'chiriladi)`);
         if (!replay) return;
         await sb.from('team_state').delete().eq('team_id', t.id);
       }
@@ -323,7 +456,7 @@ function pickTeam(teamId) {
     timerInterval: null,
     alertInterval: null,
   };
-  document.getElementById('role-team-name').textContent = state.teamName;
+  document.getElementById('role-team-name').textContent = teamDisplayName(state.teamName);
   document.getElementById('role-connect-status').textContent = '';
   showScreen('screen-role');
   refreshRolePickLocks();
@@ -338,7 +471,7 @@ async function pickRole(role) {
   state.role = role;
   state.missions = missionsForRole(state.teamName, role);
   const statusEl = document.getElementById('role-connect-status');
-  statusEl.textContent = 'Connecting to LAB-09 mainframe...';
+  statusEl.textContent = 'LAB-09 markaziy tizimiga ulanish...';
 
   // Idempotent row creation: if the team row doesn't exist yet, create it. If it
   // already exists (another agent joined first), this does nothing and preserves state.
@@ -359,14 +492,14 @@ async function pickRole(role) {
     return;
   }
 
-  statusEl.textContent = 'Connected. Briefing incoming...';
-  document.getElementById('briefing-team-name').textContent = `${state.teamName} — AGENT ${role}`;
+  statusEl.textContent = 'Ulandi. Brifing keladi...';
+  document.getElementById('briefing-team-name').textContent = `${teamDisplayName(state.teamName)} — AGENT ${role}`;
   showScreen('screen-briefing');
   document.getElementById('screen-briefing').style.display = 'flex';
   typeLines([
-    `Welcome, Agent ${role}. This is ECHO-9, the lab's last functioning AI core.`,
-    'NULLPOINT has locked three vaults inside the mainframe. Each holds a fragment of the disarm code.',
-    'Your teammates are connecting on their own devices right now. The mission timer starts the moment ANY of you deploys.',
+    `Xush kelibsiz, Agent ${role}. Bu ECHO-9 — labning so'nggi ishlaydigan AI yadrosi.`,
+    'NULLPOINT markaziy tizim ichidagi uchta seyfni qulflagan. Har birida o\'chirish kodining bir bo\'lagi bor.',
+    'Jamoadoshlaringiz hozir o\'z qurilmalaridan ulanmoqda. Missiya taymeri sizlardan BIRINGIZ joylashgan zahoti boshlanadi.',
   ], document.getElementById('briefing-text'), () => {});
 }
 
@@ -387,7 +520,7 @@ function subscribeRealtime() {
 async function enterDashboard() {
   document.getElementById('screen-briefing').style.display = 'none';
   showScreen('screen-dashboard');
-  document.getElementById('dash-team-name').textContent = `${state.teamName} — AGENT ${state.role}`;
+  document.getElementById('dash-team-name').textContent = `${teamDisplayName(state.teamName)} — AGENT ${state.role}`;
 
   await sb.rpc('start_timer', { p_team_id: state.teamId });
   const { data: row } = await sb.from('team_state').select('*').eq('team_id', state.teamId).single();
@@ -420,14 +553,14 @@ function renderVaults() {
     const solved = solvedArrayFor(role);
     const solvedCount = solved.filter(Boolean).length;
     document.getElementById(`vp-fill-${role}`).style.width = `${(solvedCount / 3) * 100}%`;
-    document.getElementById(`vault-status-${role}`).textContent = `${solvedCount} / 3 STAGES`;
+    document.getElementById(`vault-status-${role}`).textContent = `${solvedCount} / 3 BOSQICH`;
     const card = document.getElementById(`vault-${role.toLowerCase()}`);
     card.classList.toggle('complete', solvedCount === 3);
     card.classList.toggle('locked-other', role !== state.role);
     const btn = card.querySelector('.btn-vault');
-    if (solvedCount === 3) btn.textContent = 'VAULT BREACHED ✓';
-    else if (role !== state.role) btn.textContent = `AGENT ${role} ONLY`;
-    else btn.textContent = 'ENTER VAULT';
+    if (solvedCount === 3) btn.textContent = 'SEYF OCHILDI ✓';
+    else if (role !== state.role) btn.textContent = `FAQAT AGENT ${role} UCHUN`;
+    else btn.textContent = 'SEYFGA KIRISH';
   });
   checkAllVaultsComplete();
 }
@@ -554,7 +687,7 @@ let activeMissionCtx = null;
 
 function openVault(role) {
   if (role !== state.role) {
-    alert(`This vault belongs to Agent ${role}. Switch devices with that agent to continue.`);
+    alert(`Bu seyf Agent ${role}ga tegishli. Davom etish uchun shu agentning qurilmasiga o'ting.`);
     return;
   }
   const solved = solvedArrayFor(role);
@@ -564,7 +697,7 @@ function openVault(role) {
   activeMissionCtx = { role, stageIdx, mission, timeLeft: MISSION_TIME_LIMIT, timerInterval: null, hintUsed: false, wrongAttempts: 0 };
 
   document.getElementById('modal-role-tag').textContent = `AGENT ${role} — ${ROLE_META[role].name}`;
-  document.getElementById('modal-stage-tag').textContent = `STAGE ${stageIdx + 1} / 3`;
+  document.getElementById('modal-stage-tag').textContent = `BOSQICH ${stageIdx + 1} / 3`;
   document.getElementById('modal-mission-title').textContent = mission.title;
   document.getElementById('modal-feedback').textContent = '';
   document.getElementById('modal-feedback').className = 'modal-feedback';
@@ -586,8 +719,8 @@ function renderMissionBody(mission) {
     });
     html += '</div>';
   } else {
-    html += `<input type="text" id="mission-answer-input" placeholder="Type your answer...">`;
-    html += `<div class="submit-row"><button class="btn-primary" id="btn-submit-answer">SUBMIT ▸</button></div>`;
+    html += `<input type="text" id="mission-answer-input" placeholder="Javobingizni kiriting...">`;
+    html += `<div class="submit-row"><button class="btn-primary" id="btn-submit-answer">YUBORISH ▸</button></div>`;
   }
   body.innerHTML = html;
 
@@ -651,7 +784,7 @@ async function submitAnswer(value, btnEl) {
 
   if (correct) {
     if (btnEl) btnEl.classList.add('correct');
-    feedback.textContent = '✓ ACCESS GRANTED — fragment secured.';
+    feedback.textContent = '✓ KIRISH RUXSAT ETILDI — bo\'lak qo\'lga olindi.';
     feedback.className = 'modal-feedback ok';
     playSuccessChime();
     await finishMissionStage(true);
@@ -667,12 +800,12 @@ async function submitAnswer(value, btnEl) {
     if (activeMissionCtx.wrongAttempts >= MAX_ANSWER_ATTEMPTS) {
       const penalty = WRONG_ANSWER_PENALTY_1 + WRONG_ANSWER_PENALTY_2;
       await sb.rpc('penalize_wrong', { p_team_id: state.teamId, p_points: penalty });
-      feedback.textContent = `✗ ACCESS DENIED TWICE (-${penalty} pts) — vault auto-advancing to next stage...`;
+      feedback.textContent = `✗ IKKI MARTA XATO (-${penalty} ball) — seyf avtomatik keyingi bosqichga o'tmoqda...`;
       feedback.className = 'modal-feedback bad';
       await finishMissionStage(false, false, true);
     } else {
       await sb.rpc('penalize_wrong', { p_team_id: state.teamId, p_points: WRONG_ANSWER_PENALTY_1 });
-      feedback.textContent = `✗ ACCESS DENIED (-${WRONG_ANSWER_PENALTY_1} pts) — one more try, agent.`;
+      feedback.textContent = `✗ XATO JAVOB (-${WRONG_ANSWER_PENALTY_1} ball) — yana bir bor urinib ko'ring, agent.`;
       feedback.className = 'modal-feedback bad';
       const { data: row } = await sb.from('team_state').select('*').eq('team_id', state.teamId).single();
       state.row = row;
@@ -683,7 +816,7 @@ async function submitAnswer(value, btnEl) {
 
 async function handleMissionTimeout() {
   const feedback = document.getElementById('modal-feedback');
-  feedback.textContent = `⏱ TIME EXPIRED. Solution revealed: "${activeMissionCtx.mission.answer}"`;
+  feedback.textContent = `⏱ VAQT TUGADI. Yechim ochildi: "${activeMissionCtx.mission.answer}"`;
   feedback.className = 'modal-feedback bad';
   playErrorBuzz();
   await finishMissionStage(false, true);
@@ -694,7 +827,7 @@ async function useHint() {
   activeMissionCtx.hintUsed = true;
   await sb.rpc('use_hint', { p_team_id: state.teamId, p_role: activeMissionCtx.role, p_stage: activeMissionCtx.stageIdx + 1 });
   const feedback = document.getElementById('modal-feedback');
-  feedback.textContent = `💡 HINT: ${activeMissionCtx.mission.hint}`;
+  feedback.textContent = `💡 MASLAHAT: ${activeMissionCtx.mission.hint}`;
   feedback.className = 'modal-feedback';
 }
 
@@ -711,7 +844,7 @@ async function finishMissionStage(solvedNormally, timedOut = false, skipped = fa
   });
   if (rpcError) {
     const feedback = document.getElementById('modal-feedback');
-    feedback.textContent = '⚠ CONNECTION LOST — could not save progress. Check Wi-Fi and try submitting again.';
+    feedback.textContent = '⚠ ULANISH UZILDI — progress saqlanmadi. Wi-Fi\'ni tekshirib, qayta yuboring.';
     feedback.className = 'modal-feedback bad';
     startMissionTimer(); // resume the stage timer instead of silently advancing
     return;
@@ -763,7 +896,7 @@ async function fuseCodes() {
 
   const { error } = await sb.rpc('fuse_team', { p_team_id: state.teamId });
   if (error) {
-    alert('⚠ Connection lost — could not record the fusion bonus. Check Wi-Fi and tap FUSE CODES again.');
+    alert('⚠ Ulanish uzildi — birlashtirish bonusi saqlanmadi. Wi-Fi\'ni tekshirib, "KODLARNI BIRLASHTIRISH" tugmasini qayta bosing.');
     return;
   }
 
@@ -790,18 +923,18 @@ async function attemptDisarm() {
   });
 
   if (val === expected) {
-    feedback.textContent = '✓ CODE ACCEPTED — DISARMING...';
+    feedback.textContent = '✓ KOD QABUL QILINDI — O\'CHIRILMOQDA...';
     feedback.className = 'disarm-feedback ok';
     playVictoryFanfare();
     const timeLeft = computeTimeLeft();
     const bonus = timeLeft > 300 ? 100 : 0;
     const { error } = await sb.rpc('finish_team', { p_team_id: state.teamId, p_outcome: 'success', p_points: 300 + bonus });
     if (error) {
-      feedback.textContent = '⚠ CONNECTION LOST — code was correct but could not save. Check Wi-Fi and press DISARM again.';
+      feedback.textContent = '⚠ ULANISH UZILDI — kod to\'g\'ri edi, ammo saqlanmadi. Wi-Fi\'ni tekshirib, qayta bosing.';
       feedback.className = 'disarm-feedback bad';
     }
   } else {
-    feedback.textContent = '✗ INCORRECT CODE — SYSTEM REJECTS INPUT.';
+    feedback.textContent = '✗ XATO KOD — TIZIM QABUL QILMADI.';
     feedback.className = 'disarm-feedback bad';
     playErrorBuzz();
     shakeScreen();
@@ -823,14 +956,14 @@ async function showFinalOutcome() {
   showScreen('screen-end');
   const headline = document.getElementById('end-headline');
   if (row.final_outcome === 'success') {
-    headline.textContent = 'BOMB DEFUSED — MISSION SUCCESS';
+    headline.textContent = 'BOMBA O\'CHIRILDI — MISSIYA MUVAFFAQIYATLI';
     headline.classList.remove('fail');
     launchConfetti();
   } else {
-    headline.textContent = 'LABORATORY LOCKDOWN — MISSION PAUSED';
+    headline.textContent = 'LABORATORIYA QULFLANDI — MISSIYA TO\'XTATILDI';
     headline.classList.add('fail');
   }
-  document.getElementById('end-team-name').textContent = `${state.teamName} — AGENT ${state.role}`;
+  document.getElementById('end-team-name').textContent = `${teamDisplayName(state.teamName)} — AGENT ${state.role}`;
   document.getElementById('end-score').textContent = row.score;
   document.getElementById('end-time').textContent = formatTime(computeTimeLeft());
   document.getElementById('end-hints').textContent = row.hints_used;
@@ -840,13 +973,13 @@ async function showFinalOutcome() {
 
 async function renderLeaderboard() {
   const board = document.getElementById('leaderboard');
-  board.innerHTML = '<p class="section-sub">Loading leaderboard...</p>';
+  board.innerHTML = '<p class="section-sub">Reyting jadvali yuklanmoqda...</p>';
   const { data, error } = await sb.from('team_state').select('team_id,team_name,score').order('score', { ascending: false });
   board.innerHTML = '';
   (data || []).forEach((r, i) => {
     const row = document.createElement('div');
     row.className = 'lb-row' + (i === 0 ? ' top' : '');
-    row.innerHTML = `<span><span class="lb-rank">#${i + 1}</span>${r.team_name}</span><span>${r.score} pts</span>`;
+    row.innerHTML = `<span><span class="lb-rank">#${i + 1}</span>${teamDisplayName(r.team_name)}</span><span>${r.score} ball</span>`;
     board.appendChild(row);
   });
 }
@@ -898,7 +1031,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('btn-reset-all').addEventListener('click', async () => {
-    if (!confirm('Erase ALL saved team results and unlock every team? This cannot be undone.')) return;
+    if (!confirm('BARCHA jamoalarning natijalarini o\'chirib, hammasini qaytadan ochishni xohlaysizmi? Buni qaytarib bo\'lmaydi.')) return;
     await sb.from('team_state').delete().neq('team_id', -1);
     renderTeamGrid();
   });
