@@ -155,7 +155,10 @@ const ROLE_META = {
 };
 
 const MISSION_TIME_LIMIT = 8 * 60; // seconds per mission stage
-const GLOBAL_TIME_LIMIT = 25 * 60; // seconds total
+const GLOBAL_TIME_LIMIT = 30 * 60; // seconds total
+const WRONG_ANSWER_PENALTY_1 = 10; // first wrong attempt
+const WRONG_ANSWER_PENALTY_2 = 15; // second wrong attempt, then auto-skip
+const MAX_ANSWER_ATTEMPTS = 2;
 
 /* ---------------------------------------------------------------
    2. SEEDED RANDOM — every device derives IDENTICAL content
@@ -235,7 +238,7 @@ const BOOT_LINES = [
   '> SCANNING FOR INTRUSIONS...',
   '> !! ALERT: UNKNOWN ENTITY DETECTED — "NULLPOINT" !!',
   '> DIGITAL BOMB SIGNATURE FOUND IN CORE SYSTEM',
-  '> ESTIMATED DETONATION: 25:00',
+  '> ESTIMATED DETONATION: 30:00',
   '> REQUESTING FIELD AGENTS...',
 ];
 
@@ -273,7 +276,7 @@ function startIntro() {
       typeLines([
         'LAB-09 has been infiltrated. A digital bomb is active inside the mainframe.',
         '9 squads have been activated. Each squad uses THREE separate devices — one per agent.',
-        'You have 25 minutes. Three agents. Three vaults. One disarm code.',
+        'You have 30 minutes. Three agents. Three vaults. One disarm code.',
         'Good luck, agents. LAB-09 is counting on you.',
       ], typeTarget, () => {
         document.getElementById('btn-start-mission').hidden = false;
@@ -348,6 +351,13 @@ async function pickRole(role) {
   state.row = row;
 
   subscribeRealtime();
+
+  if (row && row.finished) {
+    // This team already completed its mission before this device joined —
+    // go straight to the result instead of replaying a "fresh" briefing.
+    showFinalOutcome();
+    return;
+  }
 
   statusEl.textContent = 'Connected. Briefing incoming...';
   document.getElementById('briefing-team-name').textContent = `${state.teamName} — AGENT ${role}`;
@@ -551,7 +561,7 @@ function openVault(role) {
   const stageIdx = solved.findIndex((s) => !s);
   if (stageIdx === -1) return;
   const mission = state.missions[stageIdx];
-  activeMissionCtx = { role, stageIdx, mission, timeLeft: MISSION_TIME_LIMIT, timerInterval: null, hintUsed: false };
+  activeMissionCtx = { role, stageIdx, mission, timeLeft: MISSION_TIME_LIMIT, timerInterval: null, hintUsed: false, wrongAttempts: 0 };
 
   document.getElementById('modal-role-tag').textContent = `AGENT ${role} — ${ROLE_META[role].name}`;
   document.getElementById('modal-stage-tag').textContent = `STAGE ${stageIdx + 1} / 3`;
@@ -650,10 +660,24 @@ async function submitAnswer(value, btnEl) {
       btnEl.classList.add('wrong');
       setTimeout(() => btnEl.classList.remove('wrong'), 600);
     }
-    feedback.textContent = '✗ ACCESS DENIED — try again, agent.';
-    feedback.className = 'modal-feedback bad';
+    activeMissionCtx.wrongAttempts++;
     playErrorBuzz();
     shakeScreen();
+
+    if (activeMissionCtx.wrongAttempts >= MAX_ANSWER_ATTEMPTS) {
+      const penalty = WRONG_ANSWER_PENALTY_1 + WRONG_ANSWER_PENALTY_2;
+      await sb.rpc('penalize_wrong', { p_team_id: state.teamId, p_points: penalty });
+      feedback.textContent = `✗ ACCESS DENIED TWICE (-${penalty} pts) — vault auto-advancing to next stage...`;
+      feedback.className = 'modal-feedback bad';
+      await finishMissionStage(false, false, true);
+    } else {
+      await sb.rpc('penalize_wrong', { p_team_id: state.teamId, p_points: WRONG_ANSWER_PENALTY_1 });
+      feedback.textContent = `✗ ACCESS DENIED (-${WRONG_ANSWER_PENALTY_1} pts) — one more try, agent.`;
+      feedback.className = 'modal-feedback bad';
+      const { data: row } = await sb.from('team_state').select('*').eq('team_id', state.teamId).single();
+      state.row = row;
+      updateScoreDisplay();
+    }
   }
 }
 
@@ -674,23 +698,39 @@ async function useHint() {
   feedback.className = 'modal-feedback';
 }
 
-async function finishMissionStage(solvedNormally, timedOut = false) {
+async function finishMissionStage(solvedNormally, timedOut = false, skipped = false) {
   clearInterval(activeMissionCtx.timerInterval);
   const elapsed = MISSION_TIME_LIMIT - activeMissionCtx.timeLeft;
-  const pts = timedOut ? 20 : pointsForElapsed(elapsed);
+  const pts = skipped ? 0 : timedOut ? 20 : pointsForElapsed(elapsed);
 
-  await sb.rpc('solve_mission', {
+  const { error: rpcError } = await sb.rpc('solve_mission', {
     p_team_id: state.teamId,
     p_role: activeMissionCtx.role,
     p_stage: activeMissionCtx.stageIdx + 1,
     p_points: pts,
   });
+  if (rpcError) {
+    const feedback = document.getElementById('modal-feedback');
+    feedback.textContent = '⚠ CONNECTION LOST — could not save progress. Check Wi-Fi and try submitting again.';
+    feedback.className = 'modal-feedback bad';
+    startMissionTimer(); // resume the stage timer instead of silently advancing
+    return;
+  }
   const { data: row } = await sb.from('team_state').select('*').eq('team_id', state.teamId).single();
   state.row = row;
   renderVaults();
   updateScoreDisplay();
 
-  setTimeout(() => closeMissionModal(), timedOut ? 2200 : 900);
+  const role = activeMissionCtx.role;
+  setTimeout(() => {
+    const solved = solvedArrayFor(role);
+    const nextStageIdx = solved.findIndex((s) => !s);
+    if (nextStageIdx === -1) {
+      closeMissionModal();
+    } else {
+      openVault(role); // auto-advance to the next stage without leaving the vault
+    }
+  }, (timedOut || skipped) ? 2200 : 900);
 }
 
 function closeMissionModal() {
@@ -721,7 +761,11 @@ async function fuseCodes() {
   document.getElementById('frag-C').textContent = fragC;
   playSuccessChime();
 
-  await sb.rpc('fuse_team', { p_team_id: state.teamId });
+  const { error } = await sb.rpc('fuse_team', { p_team_id: state.teamId });
+  if (error) {
+    alert('⚠ Connection lost — could not record the fusion bonus. Check Wi-Fi and tap FUSE CODES again.');
+    return;
+  }
 
   const ledRow = document.getElementById('bomb-led-row');
   ledRow.innerHTML = '';
@@ -751,7 +795,11 @@ async function attemptDisarm() {
     playVictoryFanfare();
     const timeLeft = computeTimeLeft();
     const bonus = timeLeft > 300 ? 100 : 0;
-    await sb.rpc('finish_team', { p_team_id: state.teamId, p_outcome: 'success', p_points: 300 + bonus });
+    const { error } = await sb.rpc('finish_team', { p_team_id: state.teamId, p_outcome: 'success', p_points: 300 + bonus });
+    if (error) {
+      feedback.textContent = '⚠ CONNECTION LOST — code was correct but could not save. Check Wi-Fi and press DISARM again.';
+      feedback.className = 'disarm-feedback bad';
+    }
   } else {
     feedback.textContent = '✗ INCORRECT CODE — SYSTEM REJECTS INPUT.';
     feedback.className = 'disarm-feedback bad';
@@ -767,6 +815,7 @@ async function attemptDisarm() {
 async function showFinalOutcome() {
   clearInterval(state.timerInterval);
   clearInterval(state.alertInterval);
+  closeMissionModal();
 
   const { data: row } = await sb.from('team_state').select('*').eq('team_id', state.teamId).single();
   state.row = row;

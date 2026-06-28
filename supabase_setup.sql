@@ -90,6 +90,16 @@ begin
 end;
 $$ language plpgsql;
 
+-- Deduct points for a wrong answer attempt (no "already applied" guard —
+-- intentionally callable once per wrong attempt, from the agent's own device)
+create or replace function penalize_wrong(p_team_id int, p_points int)
+returns void as $$
+begin
+  update team_state set score = greatest(0, score - p_points), updated_at = now()
+  where team_id = p_team_id;
+end;
+$$ language plpgsql;
+
 -- Enable realtime change broadcasts for this table
 do $$
 begin
