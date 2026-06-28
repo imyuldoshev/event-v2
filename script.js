@@ -579,6 +579,11 @@ function renderVaults() {
 function checkAllVaultsComplete() {
   const allDone = ['A', 'B', 'C'].every((r) => solvedArrayFor(r).every(Boolean));
   document.getElementById('fusion-panel').classList.toggle('show', allDone);
+
+  if (allDone && !state._autoFusionDone && document.getElementById('screen-dashboard').classList.contains('active')) {
+    state._autoFusionDone = true;
+    setTimeout(() => enterFusionScreen(), 1400); // brief pause so agents see the "vaults breached" message first
+  }
 }
 
 function updateScoreDisplay() {
