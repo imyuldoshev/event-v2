@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "lab09-static",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "5577", "."],
+      "port": 5577
+    }
+  ]
+}
